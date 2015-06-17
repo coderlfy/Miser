@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">守财奴</string>
+    <string name="consumptionTitle">事项或摘要描述：</string>
+    <string name="execDate">发生日期：</string>
+    <string name="isConsumptioned">产生费用方式：</string>
+    <string name="money">0</string>
+    <string name="moneyStr">金额：</string>
+    <string name="action_settings">Settings</string>
+
+</resources>
