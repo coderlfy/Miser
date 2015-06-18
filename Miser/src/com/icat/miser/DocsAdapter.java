@@ -54,13 +54,12 @@ public class DocsAdapter extends BaseAdapter {
 		holder.mTitle.setText(item.getTitle());
 		holder.mStartDate.setText(item.getStartDateString());
 
+		int tmpcolor = android.graphics.Color.BLACK;
 		if (item.getMoney() != 0) {
-			int tmpcolor = item.getIsConsumption() ? android.graphics.Color.RED
+			tmpcolor = item.getIsConsumption() ? android.graphics.Color.RED
 					: android.graphics.Color.GREEN;
-
-			holder.mMoney.setTextColor(tmpcolor);
-
 		}
+		holder.mMoney.setTextColor(tmpcolor);
 		holder.mMoney.setText(item.getMoneyString());
 		return convertView;
 	}

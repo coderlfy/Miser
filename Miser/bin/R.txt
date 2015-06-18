@@ -310,7 +310,7 @@ int id action_context_bar 0x7f060029
 int id action_menu_divider 0x7f060022
 int id action_menu_presenter 0x7f060023
 int id action_mode_close_button 0x7f060030
-int id action_settings 0x7f060059
+int id action_settings 0x7f06005a
 int id activity_chooser_view_content 0x7f060031
 int id always 0x7f060017
 int id beginning 0x7f06001d
@@ -325,6 +325,7 @@ int id disabled 0x7f060000
 int id dropdown 0x7f06001b
 int id edit_query 0x7f06003c
 int id end 0x7f06001f
+int id et_keytitle 0x7f060059
 int id et_money 0x7f06004f
 int id et_startDate 0x7f06004b
 int id et_title 0x7f060049
@@ -419,7 +420,8 @@ int layout activity_consumptionlogs 0x7f030019
 int layout consumption_item 0x7f03001a
 int layout pull_to_refresh_header_horizontal 0x7f03001b
 int layout pull_to_refresh_header_vertical 0x7f03001c
-int layout support_simple_spinner_dropdown_item 0x7f03001d
+int layout search_bytitlekey 0x7f03001d
+int layout support_simple_spinner_dropdown_item 0x7f03001e
 int menu consumptionlogs 0x7f0d0000
 int raw pull_event 0x7f050000
 int raw refreshing_sound 0x7f050001

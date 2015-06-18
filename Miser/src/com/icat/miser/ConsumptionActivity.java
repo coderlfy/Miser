@@ -103,7 +103,7 @@ public class ConsumptionActivity extends SherlockActivity {
 			try {
 				consumption.setTitle(this.mEtTitle.getText().toString())
 							.setMoney(Double.parseDouble(this.mEtMoney.getText().toString()))
-							.setIsConsumption(this.mTBisConsumptioned.isChecked())
+							.setIsConsumption(!this.mTBisConsumptioned.isChecked())
 							.setStartDate((new SimpleDateFormat("yyyy-MM-dd")).parse(this.mEtStartDate.getText().toString()));
 				
 				if(this.mCurrentId == 0)

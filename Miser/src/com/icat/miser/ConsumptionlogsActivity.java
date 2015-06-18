@@ -1,19 +1,24 @@
 package com.icat.miser;
 
 import com.actionbarsherlock.app.SherlockListActivity;
+import com.actionbarsherlock.view.MenuItem;
 import com.icatcontrol.icatlistview.startup.CatListView;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.*;
 import android.view.ContextMenu.*;
+import android.widget.EditText;
 
 public class ConsumptionlogsActivity extends SherlockListActivity {
 
-	static final int MENU_Add_Consumption = 0;
-	static final int MENU_DISABLE_SCROLL = 1;
-	static final int MENU_SET_MODE = 2;
-	static final int MENU_DEMO = 3;
+	static final int MENU_Add_Consumption = 1;
+	static final int MENU_search_titleKey = 2;
+	static final int MENU_search_startDate = 3;
+	static final int MENU_search_money = 4;
+	static final int MENU_set_option = 5;
+	static final int MENU_View_ALL = 6;
 
 	private CatListView mPullRefreshListView;
 	private ConsumptionlogsController mConsumptionlogsController;
@@ -35,7 +40,19 @@ public class ConsumptionlogsActivity extends SherlockListActivity {
 	@Override
 	public boolean onCreateOptionsMenu(com.actionbarsherlock.view.Menu menu) {
 		/* 添加右上角的功能项 */
-		menu.add(0, MENU_Add_Consumption, 0, "新记录");
+		menu.add(0, MENU_View_ALL, 0, "查看全部");
+		menu.add(0, MENU_search_titleKey, 0, "按名称过滤");
+		menu.add(0, MENU_search_startDate, 0, "按时间过滤");
+		menu.add(0, MENU_search_money, 0, "按金额过滤");
+		menu.add(0, MENU_set_option, 0, "软件配置");
+		
+		menu.add(0, MENU_Add_Consumption, 0, "New")
+        .setIcon(R.drawable.ic_compose)
+        .setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+		
+		//加入统计菜单
+		//menu.add("Search").setShowAsAction( MenuItem.SHOW_AS_ACTION_IF_ROOM |
+		//		 MenuItem.SHOW_AS_ACTION_WITH_TEXT);
 		/*
 		 * menu.add( 0, MENU_DISABLE_SCROLL, 1,
 		 * mPullRefreshListView.isScrollingWhileRefreshingEnabled() ?
@@ -91,6 +108,19 @@ public class ConsumptionlogsActivity extends SherlockListActivity {
 			bundle.putSerializable("consumptionlog", null);
 			intent.putExtras(bundle);
 			startActivity(intent);
+			break;
+		case MENU_search_titleKey:
+			EditText titlekey = new EditText(ConsumptionlogsActivity.this);
+			titlekey.setBackgroundResource(R.drawable.et_bg);
+			
+			new AlertDialog.Builder(ConsumptionlogsActivity.this)  
+			.setTitle("请输入标题关键字")  
+			.setIcon(android.R.drawable.ic_search_category_default)  
+			.setView(titlekey)  
+			.setPositiveButton("搜索", null)  
+			.setNegativeButton("取消", null) 
+			.show();  
+
 			break;
 		/*
 		 * case MENU_MANUAL_REFRESH: new GetDataTask().execute();

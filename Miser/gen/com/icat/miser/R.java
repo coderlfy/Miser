@@ -1270,7 +1270,7 @@ containing a value of this type.
         public static final int action_menu_divider=0x7f060022;
         public static final int action_menu_presenter=0x7f060023;
         public static final int action_mode_close_button=0x7f060030;
-        public static final int action_settings=0x7f060059;
+        public static final int action_settings=0x7f06005a;
         public static final int activity_chooser_view_content=0x7f060031;
         public static final int always=0x7f060017;
         public static final int beginning=0x7f06001d;
@@ -1285,6 +1285,7 @@ containing a value of this type.
         public static final int dropdown=0x7f06001b;
         public static final int edit_query=0x7f06003c;
         public static final int end=0x7f06001f;
+        public static final int et_keytitle=0x7f060059;
         public static final int et_money=0x7f06004f;
         public static final int et_startDate=0x7f06004b;
         public static final int et_title=0x7f060049;
@@ -1405,7 +1406,8 @@ containing a value of this type.
         public static final int consumption_item=0x7f03001a;
         public static final int pull_to_refresh_header_horizontal=0x7f03001b;
         public static final int pull_to_refresh_header_vertical=0x7f03001c;
-        public static final int support_simple_spinner_dropdown_item=0x7f03001d;
+        public static final int search_bytitlekey=0x7f03001d;
+        public static final int support_simple_spinner_dropdown_item=0x7f03001e;
     }
     public static final class menu {
         public static final int consumptionlogs=0x7f0d0000;

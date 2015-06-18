@@ -120,7 +120,7 @@ public class TConsumption {
 								.setId(cursor.getInt(0))
 								.setTitle(cursor.getString(1))
 								.setMoney(cursor.getDouble(3))
-								.setIsConsumption(cursor.getInt(2) != 1)
+								.setIsConsumption(cursor.getInt(2) == 1)
 								.setStartDate(
 										(new SimpleDateFormat("yyyy-MM-dd"))
 												.parse(cursor.getString(4)));
@@ -158,9 +158,10 @@ public class TConsumption {
 		values.put(TConsumptionColumns.money, consumption.getMoney());
 		values.put(TConsumptionColumns.startDate, consumption.getStartDateString());
 
-		// updating row
+		int keyid = consumption.getId();
+		Log.d("updateid", String.valueOf(keyid));
 		return db.update(TableName, values, TConsumptionColumns.ID + " = ?",
-				new String[] { String.valueOf(consumption.getId()) });// 主键要修改？？？
+				new String[] { String.valueOf(keyid) });// 主键要修改？？？
 	}
 
 	// Deleting single contact

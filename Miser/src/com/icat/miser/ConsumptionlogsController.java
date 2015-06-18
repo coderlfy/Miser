@@ -72,10 +72,8 @@ public class ConsumptionlogsController {
 			ConsumptionModel item = _Consuptions.get(i);
 			if(item.getId() == consumption.getId()){
 				isfind = true;
-				item.setIsConsumption(consumption.getIsConsumption());
-				item.setMoney(consumption.getMoney());
-				item.setStartDate(consumption.getStartDate());
-				item.setTitle(consumption.getTitle());
+				
+				_Consuptions.set(i, consumption);
 			}  
 		}
 		if(!isfind)
