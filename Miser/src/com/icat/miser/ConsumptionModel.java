@@ -13,6 +13,7 @@ public class ConsumptionModel implements Serializable {
 	 */
 	private static final long serialVersionUID = -4410499064771485618L;
 
+	private int _id = 0;
 	private String _title = "";
 	private Boolean _isConsumption = false;
 	private double _money = 0;
@@ -27,6 +28,15 @@ public class ConsumptionModel implements Serializable {
 
 	public String getTitle() {
 		return this._title;
+
+	}
+	public ConsumptionModel setId(int id) {
+		this._id = id;
+		return this;
+	}
+
+	public int getId() {
+		return this._id;
 
 	}
 

@@ -14,6 +14,10 @@ public class DocsAdapter extends BaseAdapter {
 		this._act = act;
 	}
 
+	public void setSource(List<ConsumptionModel> docs) {
+		this._docs = docs;
+	}
+
 	@Override
 	public int getCount() {
 		// TODO Auto-generated method stub

@@ -17,6 +17,7 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.*;
 import android.text.format.DateUtils;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 import android.widget.*;
@@ -47,12 +48,41 @@ public class ConsumptionlogsController {
 			{ "Ì«Ô­ÂòÖÐÎç²Í", "true", "12.9", "2015-3-30" } };
 
 	private CatListView mPullRefreshListView;
-	private SwipeMenuListView mActualListView;
+	private static SwipeMenuListView _ActualListView;
 	private ConsumptionlogsActivity mActivity;
 	private Boolean mEnableRefreshSound = false;
+	public static MiserDBHelper _MiserDBHelper = null;
+	private static DocsAdapter _Docsadapter = null;
+	private static List<ConsumptionModel> _Consuptions = null;
+	private TConsumption mTConsumption = null;
 
 	public ConsumptionlogsController(ConsumptionlogsActivity activity) {
 		this.mActivity = activity;
+		
+		if(_MiserDBHelper == null)
+			_MiserDBHelper = new MiserDBHelper(this.mActivity);
+		
+		
+	}
+	
+	public static void updateListView(ConsumptionModel consumption){
+		Boolean isfind = false;
+		for(int i = 0; i < _Consuptions.size(); i++)  
+		{  
+			ConsumptionModel item = _Consuptions.get(i);
+			if(item.getId() == consumption.getId()){
+				isfind = true;
+				item.setIsConsumption(consumption.getIsConsumption());
+				item.setMoney(consumption.getMoney());
+				item.setStartDate(consumption.getStartDate());
+				item.setTitle(consumption.getTitle());
+			}  
+		}
+		if(!isfind)
+			_Consuptions.add(consumption);
+		
+		_Docsadapter.setSource(_Consuptions);
+		_Docsadapter.notifyDataSetChanged();
 	}
 
 	public void BindRefreshListView(CatListView mPullRefreshListView) {
@@ -120,14 +150,15 @@ public class ConsumptionlogsController {
 	}
 
 	private void bindContentListView() {
-		mActualListView = mPullRefreshListView.getRefreshableView();
+		_ActualListView = mPullRefreshListView.getRefreshableView();
 
-		this.mActivity.registerForContextMenu(mActualListView);
+		this.mActivity.registerForContextMenu(_ActualListView);
 
-		DocsAdapter docsadapter = new DocsAdapter(this.mActivity,
-				this.createData());
+		_Consuptions = this.createData();
+		_Docsadapter = new DocsAdapter(this.mActivity,
+				_Consuptions);
 
-		mActualListView.setAdapter(docsadapter);
+		_ActualListView.setAdapter(_Docsadapter);
 
 		this.addSwipeMenu();
 
@@ -173,25 +204,26 @@ public class ConsumptionlogsController {
 			}
 		};
 
-		mActualListView.setMenuCreator(creator);
+		_ActualListView.setMenuCreator(creator);
 	}
 
 	private void bindSwipeMenuItemHandler() {
 
-		mActualListView
+		_ActualListView
 				.setOnMenuItemClickListener(new OnMenuItemClickListener() {
 					@Override
 					public boolean onMenuItemClick(int position,
 							SwipeMenu menu, int index) {
-						// ApplicationInfo item = mAppList.get(position);
+						
+						ConsumptionModel item = _Consuptions.get(position);
 						switch (index) {
 						case 0:
-							// open
-							// open(item);
+							mTConsumption.Delete(item.getId());
+							_Consuptions.remove(item);
+							_Docsadapter.setSource(_Consuptions);
+							_Docsadapter.notifyDataSetChanged();
 							break;
 						case 1:
-							// mAppList.remove(position);
-							// mAdapter.notifyDataSetChanged();
 							break;
 						}
 						return false;
@@ -200,7 +232,7 @@ public class ConsumptionlogsController {
 	}
 
 	private void bindSwipeMenuHandler() {
-		mActualListView.setOnSwipeListener(new OnSwipeListener() {
+		_ActualListView.setOnSwipeListener(new OnSwipeListener() {
 
 			@Override
 			public void onSwipeStart(int position) {
@@ -213,7 +245,7 @@ public class ConsumptionlogsController {
 	}
 
 	private void bindContentItemClickHandler() {
-		mActualListView.setOnItemClickListener(new OnItemClickListener() {
+		_ActualListView.setOnItemClickListener(new OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
@@ -221,7 +253,7 @@ public class ConsumptionlogsController {
 
 				Bundle bundle = new Bundle();
 				bundle.putSerializable("consumptionlog",
-						(ConsumptionModel) mActualListView
+						(ConsumptionModel) _ActualListView
 								.getItemAtPosition(position));
 				intent.putExtras(bundle);
 				mActivity.startActivity(intent);
@@ -230,7 +262,7 @@ public class ConsumptionlogsController {
 	}
 
 	private void bindContentItemLongClickHandler() {
-		mActualListView
+		_ActualListView
 				.setOnItemLongClickListener(new OnItemLongClickListener() {
 
 					@Override
@@ -244,29 +276,10 @@ public class ConsumptionlogsController {
 	}
 
 	private List<ConsumptionModel> createData() {
-		List<ConsumptionModel> docs = new ArrayList<ConsumptionModel>();
-
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-
-		for (int i = 0; i < consumptionlogsData.length; i++) {
-			ConsumptionModel doc = new ConsumptionModel();
-			try {
-				doc.setTitle(consumptionlogsData[i][0])
-						.setIsConsumption(
-								Boolean.parseBoolean(consumptionlogsData[i][1]))
-						.setMoney(Double.parseDouble(consumptionlogsData[i][2]))
-						.setStartDate(sdf.parse(consumptionlogsData[i][3]));
-
-			} catch (NumberFormatException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (ParseException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			docs.add(doc);
-		}
-		return docs;
+		this.mTConsumption = new TConsumption();
+		this.mTConsumption.setDBHelper(_MiserDBHelper);
+		
+		return this.mTConsumption.Get();
 	}
 
 	private int dp2px(int dp) {
