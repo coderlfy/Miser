@@ -95,10 +95,6 @@ public class ConsumptionActivity extends SherlockActivity {
 
 		switch (item.getItemId()) {
 		case 1:
-			TConsumption tconsumption = new TConsumption();
-			tconsumption.setDBHelper(ConsumptionlogsController._MiserDBHelper);
-			
-			
 			ConsumptionModel consumption = new ConsumptionModel();
 			try {
 				consumption.setTitle(this.mEtTitle.getText().toString())
@@ -107,10 +103,10 @@ public class ConsumptionActivity extends SherlockActivity {
 							.setStartDate((new SimpleDateFormat("yyyy-MM-dd")).parse(this.mEtStartDate.getText().toString()));
 				
 				if(this.mCurrentId == 0)
-					consumption.setId(tconsumption.Add(consumption));
+					consumption.setId(ConsumptionlogsController._ConsumptionDataManager.add(consumption));
 				else{
 					consumption.setId(this.mCurrentId);
-					tconsumption.Update(consumption);
+					ConsumptionlogsController._ConsumptionDataManager.update(consumption);
 				}
 					
 				

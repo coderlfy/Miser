@@ -18,8 +18,6 @@ public class ConsumptionModel implements Serializable {
 	private Boolean _isConsumption = false;
 	private double _money = 0;
 	private Date _startDate = new Date();
-	
-	private static DateFormat _df = new DateFormat();
 
 	public ConsumptionModel setTitle(String title) {
 		this._title = title;
@@ -71,7 +69,7 @@ public class ConsumptionModel implements Serializable {
 	}
 	
 	public String getStartDateString() {
-		return (String) _df.format("yyyy-MM-dd", this._startDate);
+		return (String) DateFormat.format("yyyy-MM-dd", this._startDate);
 
 	}
 

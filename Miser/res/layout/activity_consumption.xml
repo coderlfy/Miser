@@ -48,7 +48,7 @@
         android:layout_height="wrap_content"
         android:background="@drawable/et_bg"
         android:ems="20"
-        android:inputType="none"
+        android:inputType="datetime"
         android:padding="10dip"
         android:textSize="18sp" />
 

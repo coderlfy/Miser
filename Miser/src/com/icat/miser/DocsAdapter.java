@@ -20,7 +20,6 @@ public class DocsAdapter extends BaseAdapter {
 
 	@Override
 	public int getCount() {
-		// TODO Auto-generated method stub
 		if (this._docs != null)
 			return this._docs.size();
 
@@ -29,7 +28,6 @@ public class DocsAdapter extends BaseAdapter {
 
 	@Override
 	public Object getItem(int position) {
-		// TODO Auto-generated method stub
 		if (this._docs != null)
 			return this._docs.get(position);
 
@@ -38,7 +36,6 @@ public class DocsAdapter extends BaseAdapter {
 
 	@Override
 	public long getItemId(int position) {
-		// TODO Auto-generated method stub
 		return position;
 	}
 

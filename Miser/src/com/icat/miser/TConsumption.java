@@ -3,13 +3,16 @@ package com.icat.miser;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.List;
 
+import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+@SuppressLint("SimpleDateFormat")
 public class TConsumption {
 	public static final String TableName = "Consumption";
 
@@ -30,7 +33,6 @@ public class TConsumption {
 	}
 
 	private SQLiteOpenHelper mSqlite = null;
-	private ArrayList<ConsumptionModel> mConsumptions = null;
 
 	public void setDBHelper(SQLiteOpenHelper sqlite) {
 		this.mSqlite = sqlite;
@@ -51,7 +53,7 @@ public class TConsumption {
 		db.insert(TableName, null, values);
 
 		Cursor cursor = db.rawQuery("select last_insert_rowid() from "
-				+ this.TableName, null);
+				+ TableName, null);
 
 		int strid = 0;
 		if (cursor.moveToFirst())
@@ -96,16 +98,32 @@ public class TConsumption {
 	}
 
 	// Getting All Contacts
-	public ArrayList<ConsumptionModel> Get() {
+	public ArrayList<ConsumptionModel> Get(int pageNumber, int pageSize,
+			List<Integer> newIds) {
+		ArrayList<ConsumptionModel> mConsumptions = null;
 		try {
-			if (mConsumptions != null)
-				mConsumptions.clear();
-			else
-				mConsumptions = new ArrayList<ConsumptionModel>();
+
+			mConsumptions = new ArrayList<ConsumptionModel>();
+			String notids = "", sqlwhere = "";
+			if (newIds != null) {
+				for (int i : newIds) {
+					notids += i + ",";
+				}
+
+				if (newIds.size() > 0)
+					notids = notids.substring(0, notids.length() - 1);
+
+				sqlwhere = " where " + TConsumptionColumns.ID + " not in ("
+						+ notids + ")";
+			}
+			int start = (pageNumber <= 0) ? 0 : ((pageNumber - 1) * pageSize);
+			String selectQuery = "select * from " + TableName + sqlwhere
+					+ " order by " + TConsumptionColumns.startDate
+					+ " desc limit " + pageSize + " offset " + start;
 
 			// Select All Query
-			String selectQuery = "SELECT  * FROM " + TableName + " order by "
-					+ TConsumptionColumns.startDate + " desc";
+			// String selectQuery = "SELECT  * FROM " + TableName + " order by "
+			// + TConsumptionColumns.startDate + " desc";
 
 			SQLiteDatabase db = this.mSqlite.getWritableDatabase();
 			Cursor cursor = db.rawQuery(selectQuery, null);
@@ -156,7 +174,8 @@ public class TConsumption {
 		values.put(TConsumptionColumns.isConsumption,
 				consumption.getIsConsumption());
 		values.put(TConsumptionColumns.money, consumption.getMoney());
-		values.put(TConsumptionColumns.startDate, consumption.getStartDateString());
+		values.put(TConsumptionColumns.startDate,
+				consumption.getStartDateString());
 
 		int keyid = consumption.getId();
 		Log.d("updateid", String.valueOf(keyid));
@@ -177,10 +196,10 @@ public class TConsumption {
 		String countQuery = "SELECT  * FROM " + TableName;
 		SQLiteDatabase db = this.mSqlite.getReadableDatabase();
 		Cursor cursor = db.rawQuery(countQuery, null);
-		cursor.close();
 
-		// return count
-		return cursor.getCount();
+		int c = cursor.getCount();
+		cursor.close();
+		return c;
 	}
 
 }

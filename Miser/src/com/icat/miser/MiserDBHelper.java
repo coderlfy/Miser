@@ -1,7 +1,5 @@
 package com.icat.miser;
 
-import com.icat.miser.TConsumption.*;
-
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
