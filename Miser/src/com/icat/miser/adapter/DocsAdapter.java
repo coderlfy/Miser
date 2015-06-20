@@ -1,6 +1,10 @@
-package com.icat.miser;
+package com.icat.miser.adapter;
 
 import java.util.List;
+
+import com.icat.miser.R;
+import com.icat.miser.model.ConsumptionModel;
+
 import android.app.Activity;
 import android.view.*;
 import android.widget.*;

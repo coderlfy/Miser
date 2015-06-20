@@ -2,6 +2,7 @@ package com.icat.miser;
 
 import com.actionbarsherlock.app.SherlockListActivity;
 import com.actionbarsherlock.view.MenuItem;
+import com.icat.miser.controller.ConsumptionlogsController;
 import com.icatcontrol.icatlistview.startup.CatListView;
 
 import android.app.AlertDialog;

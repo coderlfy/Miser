@@ -1,4 +1,4 @@
-package com.icat.miser;
+package com.icat.miser.model;
 
 import java.io.Serializable;
 import java.text.DecimalFormat;
@@ -69,7 +69,7 @@ public class ConsumptionModel implements Serializable {
 	}
 	
 	public String getStartDateString() {
-		return (String) DateFormat.format("yyyy-MM-dd", this._startDate);
+		return (String) DateFormat.format("yyyy-MM-dd HH:mm", this._startDate);
 
 	}
 

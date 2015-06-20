@@ -1,7 +1,13 @@
-package com.icat.miser;
+package com.icat.miser.controller;
 
 import java.util.List;
 
+import com.icat.miser.ConsumptionActivity;
+import com.icat.miser.ConsumptionDataManager;
+import com.icat.miser.ConsumptionlogsActivity;
+import com.icat.miser.R;
+import com.icat.miser.adapter.DocsAdapter;
+import com.icat.miser.model.ConsumptionModel;
 import com.icatcontrol.icatlistview.extras.SoundPullEventListener;
 import com.icatcontrol.icatlistview.pulltorefresh.*;
 import com.icatcontrol.icatlistview.pulltorefresh.PullToRefreshBase.*;

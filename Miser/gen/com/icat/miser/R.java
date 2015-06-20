@@ -1270,7 +1270,7 @@ containing a value of this type.
         public static final int action_menu_divider=0x7f060022;
         public static final int action_menu_presenter=0x7f060023;
         public static final int action_mode_close_button=0x7f060030;
-        public static final int action_settings=0x7f06005a;
+        public static final int action_settings=0x7f06005c;
         public static final int activity_chooser_view_content=0x7f060031;
         public static final int always=0x7f060017;
         public static final int beginning=0x7f06001d;
@@ -1278,6 +1278,7 @@ containing a value of this type.
         public static final int checkbox=0x7f060039;
         public static final int collapseActionView=0x7f060019;
         public static final int consumption_logs_list=0x7f060050;
+        public static final int datepicker=0x7f060051;
         public static final int default_activity_button=0x7f060034;
         public static final int dialog=0x7f06001a;
         public static final int disableHome=0x7f060014;
@@ -1285,13 +1286,13 @@ containing a value of this type.
         public static final int dropdown=0x7f06001b;
         public static final int edit_query=0x7f06003c;
         public static final int end=0x7f06001f;
-        public static final int et_keytitle=0x7f060059;
+        public static final int et_keytitle=0x7f06005b;
         public static final int et_money=0x7f06004f;
         public static final int et_startDate=0x7f06004b;
         public static final int et_title=0x7f060049;
         public static final int expand_activities_button=0x7f060032;
         public static final int expanded_menu=0x7f060038;
-        public static final int fl_inner=0x7f060054;
+        public static final int fl_inner=0x7f060056;
         public static final int flip=0x7f060008;
         public static final int gridview=0x7f060009;
         public static final int home=0x7f060020;
@@ -1312,10 +1313,10 @@ containing a value of this type.
         public static final int pullFromEnd=0x7f060002;
         public static final int pullFromStart=0x7f060001;
         public static final int pullUpFromBottom=0x7f060006;
-        public static final int pull_to_refresh_image=0x7f060055;
-        public static final int pull_to_refresh_progress=0x7f060056;
-        public static final int pull_to_refresh_sub_text=0x7f060058;
-        public static final int pull_to_refresh_text=0x7f060057;
+        public static final int pull_to_refresh_image=0x7f060057;
+        public static final int pull_to_refresh_progress=0x7f060058;
+        public static final int pull_to_refresh_sub_text=0x7f06005a;
+        public static final int pull_to_refresh_text=0x7f060059;
         public static final int radio=0x7f06003b;
         public static final int rotate=0x7f060007;
         public static final int scrollview=0x7f06000b;
@@ -1337,11 +1338,12 @@ containing a value of this type.
         public static final int submit_area=0x7f060045;
         public static final int tabMode=0x7f06000e;
         public static final int tb_isConsumptioned=0x7f06004d;
+        public static final int timepicker=0x7f060052;
         public static final int title=0x7f060037;
         public static final int top_action_bar=0x7f06002c;
-        public static final int tvDocTitle=0x7f060051;
-        public static final int tvMoney=0x7f060053;
-        public static final int tvStartDate=0x7f060052;
+        public static final int tvDocTitle=0x7f060053;
+        public static final int tvMoney=0x7f060055;
+        public static final int tvStartDate=0x7f060054;
         public static final int tv_execDate=0x7f06004a;
         public static final int tv_isConsumptioned=0x7f06004c;
         public static final int tv_money=0x7f06004e;
@@ -1403,11 +1405,12 @@ containing a value of this type.
         public static final int abc_simple_decor=0x7f030017;
         public static final int activity_consumption=0x7f030018;
         public static final int activity_consumptionlogs=0x7f030019;
-        public static final int consumption_item=0x7f03001a;
-        public static final int pull_to_refresh_header_horizontal=0x7f03001b;
-        public static final int pull_to_refresh_header_vertical=0x7f03001c;
-        public static final int search_bytitlekey=0x7f03001d;
-        public static final int support_simple_spinner_dropdown_item=0x7f03001e;
+        public static final int common_datetime=0x7f03001a;
+        public static final int consumption_item=0x7f03001b;
+        public static final int pull_to_refresh_header_horizontal=0x7f03001c;
+        public static final int pull_to_refresh_header_vertical=0x7f03001d;
+        public static final int search_bytitlekey=0x7f03001e;
+        public static final int support_simple_spinner_dropdown_item=0x7f03001f;
     }
     public static final class menu {
         public static final int consumptionlogs=0x7f0d0000;

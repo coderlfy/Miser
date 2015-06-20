@@ -1,4 +1,5 @@
-package com.icat.miser;
+package com.icat.miser.db;
+
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;

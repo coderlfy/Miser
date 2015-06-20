@@ -1,9 +1,11 @@
-package com.icat.miser;
+package com.icat.miser.db;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+
+import com.icat.miser.model.ConsumptionModel;
 
 import android.annotation.SuppressLint;
 import android.content.ContentValues;
@@ -84,7 +86,7 @@ public class TConsumption {
 					.setMoney(cursor.getDouble(2))
 					.setIsConsumption(cursor.getInt(1) == 1)
 					.setStartDate(
-							(new SimpleDateFormat("yyyy-MM-dd")).parse(cursor
+							(new SimpleDateFormat("yyyy-MM-dd HH:mm")).parse(cursor
 									.getString(3)));
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
@@ -140,7 +142,7 @@ public class TConsumption {
 								.setMoney(cursor.getDouble(3))
 								.setIsConsumption(cursor.getInt(2) == 1)
 								.setStartDate(
-										(new SimpleDateFormat("yyyy-MM-dd"))
+										(new SimpleDateFormat("yyyy-MM-dd HH:mm"))
 												.parse(cursor.getString(4)));
 
 						mConsumptions.add(consumption);

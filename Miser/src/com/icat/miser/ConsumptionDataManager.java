@@ -3,6 +3,10 @@ package com.icat.miser;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.icat.miser.db.MiserDBHelper;
+import com.icat.miser.db.TConsumption;
+import com.icat.miser.model.ConsumptionModel;
+
 import android.app.Activity;
 
 public class ConsumptionDataManager {
