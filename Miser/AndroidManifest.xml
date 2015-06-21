@@ -27,6 +27,10 @@
             android:uiOptions="splitActionBarWhenNarrow"
             android:windowSoftInputMode="adjustUnspecified|stateHidden" >
         </activity>
+        <activity
+            android:name=".MonthChartActivity"
+            android:parentActivityName=".ConsumptionlogsActivity" >
+        </activity>
     </application>
 
 </manifest>
