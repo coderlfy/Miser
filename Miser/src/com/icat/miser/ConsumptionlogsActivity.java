@@ -129,9 +129,9 @@ public class ConsumptionlogsActivity extends SherlockListActivity {
 			.setNegativeButton("È¡Ïû", null) 
 			.show();  
 		case MENU_view_monthChart:
-			Intent intent1 = new Intent(MonthChartActivity.this,
-					ConsumptionActivity.class);
-			startActivity(intent);
+			Intent intent1 = new Intent(ConsumptionlogsActivity.this,
+					MonthChartActivity.class);
+			startActivity(intent1);
 			break;
 		/*
 		 * case MENU_MANUAL_REFRESH: new GetDataTask().execute();
