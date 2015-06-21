@@ -24,10 +24,10 @@ public class ConsumptionDataManager {
 
 	public ConsumptionDataManager(Activity activity) {
 		this.mActivity = activity;
-		// ？？？取当前库的记录数。
+
 		if (_MiserDBHelper == null)
 			_MiserDBHelper = new MiserDBHelper(this.mActivity);
-		
+
 		this.mTConsumption = new TConsumption();
 		this.mTConsumption.setDBHelper(_MiserDBHelper);
 
@@ -57,7 +57,7 @@ public class ConsumptionDataManager {
 			}
 		}
 		if (!isfind)
-			_Consuptions.add(newConsumption);
+			_Consuptions.add(0, newConsumption);
 
 		return _Consuptions;
 	}
@@ -68,20 +68,20 @@ public class ConsumptionDataManager {
 		this.mHasViewRecords--;
 		this.mTotalRecords--;
 	}
-	
-	public int add(ConsumptionModel entity){
-		
+
+	public int add(ConsumptionModel entity) {
+
 		int newid = this.mTConsumption.Add(entity);
 		this.mHasViewRecords++;
 		this.mTotalRecords++;
-		if(_newIds == null)
+		if (_newIds == null)
 			_newIds = new ArrayList<Integer>();
 		_newIds.add(newid);
-		
+
 		return newid;
 	}
-	
-	public void update(ConsumptionModel entity){
+
+	public void update(ConsumptionModel entity) {
 		this.mTConsumption.Update(entity);
 	}
 
@@ -95,13 +95,16 @@ public class ConsumptionDataManager {
 		this.setmIsFinishLoaded((mHasViewRecords == mTotalRecords));
 		mCurrentPageIndex++;
 
+		if (_newIds != null)
+			_newIds.clear();
+
 		return this._Consuptions;
 	}
 
 	public void attachData() {
-		if(this.mIsFinishLoaded)
+		if (this.mIsFinishLoaded)
 			return;
-		
+
 		List<ConsumptionModel> tmp = this.mTConsumption.Get(
 				mCurrentPageIndex + 1, this.mPageSize, this._newIds);
 		int c = tmp.size();
@@ -113,8 +116,8 @@ public class ConsumptionDataManager {
 			mCurrentPageIndex++;
 		}
 	}
-	
-	public int getCount(){
+
+	public int getCount() {
 		return this.mTotalRecords;
 	}
 }

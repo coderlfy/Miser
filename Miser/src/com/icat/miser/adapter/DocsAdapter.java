@@ -53,7 +53,7 @@ public class DocsAdapter extends BaseAdapter {
 		ViewHolder holder = (ViewHolder) convertView.getTag();
 		ConsumptionModel item = (ConsumptionModel) getItem(position);
 		holder.mTitle.setText(item.getTitle());
-		holder.mStartDate.setText(item.getStartDateString());
+		holder.mStartDate.setText(item.getStartDateView());
 
 		int tmpcolor = android.graphics.Color.BLACK;
 		if (item.getMoney() != 0) {

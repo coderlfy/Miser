@@ -18,6 +18,7 @@ public class ConsumptionModel implements Serializable {
 	private Boolean _isConsumption = false;
 	private double _money = 0;
 	private Date _startDate = new Date();
+	//private SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 
 	public ConsumptionModel setTitle(String title) {
 		this._title = title;
@@ -28,6 +29,7 @@ public class ConsumptionModel implements Serializable {
 		return this._title;
 
 	}
+
 	public ConsumptionModel setId(int id) {
 		this._id = id;
 		return this;
@@ -57,7 +59,7 @@ public class ConsumptionModel implements Serializable {
 		return this._money;
 
 	}
-	
+
 	public ConsumptionModel setStartDate(Date startDate) {
 		this._startDate = startDate;
 		return this;
@@ -67,17 +69,38 @@ public class ConsumptionModel implements Serializable {
 		return this._startDate;
 
 	}
-	
+
 	public String getStartDateString() {
 		return (String) DateFormat.format("yyyy-MM-dd HH:mm", this._startDate);
 
 	}
 
+	public String getStartDateView() {
+		String formatstr = "yyyy-MM-dd HH:mm";
+		String tmp = (String) DateFormat.format("yyyy-MM-dd", this._startDate);
+		String now = (String) DateFormat.format("yyyy-MM-dd", new Date());
+		if (tmp.compareTo(now) == 0) {
+			formatstr = "½ñÌì HH:mm";
+		}
+		else if(tmp.compareTo(this.subtract(1)) == 0){
+			formatstr = "×òÌì HH:mm";
+		}
+
+		return (String) DateFormat.format(formatstr, this._startDate);
+
+	}
+
+	private String subtract(int day) {
+
+		return (String) DateFormat.format("yyyy-MM-dd",
+				new Date((new Date()).getTime() - day * 24 * 60 * 60 * 1000));
+	}
+
 	public String getMoneyString() {
 		DecimalFormat df = new DecimalFormat("#.##");
 		String moneyunsigned = df.format(this._money);
-		return _money == 0 ? "0" : _isConsumption 
-				? "-" + moneyunsigned : "+" + moneyunsigned;
+		return _money == 0 ? "0" : _isConsumption ? "-" + moneyunsigned : "+"
+				+ moneyunsigned;
 
 	}
 

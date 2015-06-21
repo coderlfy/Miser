@@ -2,8 +2,7 @@ package com.icat.miser.db;
 
 
 import android.content.Context;
-import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
+import android.database.sqlite.*;
 import android.util.Log;
 
 public class MiserDBHelper extends SQLiteOpenHelper {

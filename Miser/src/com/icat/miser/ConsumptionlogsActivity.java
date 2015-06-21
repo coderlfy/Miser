@@ -17,9 +17,11 @@ public class ConsumptionlogsActivity extends SherlockListActivity {
 	static final int MENU_Add_Consumption = 1;
 	static final int MENU_search_titleKey = 2;
 	static final int MENU_search_startDate = 3;
-	static final int MENU_search_money = 4;
+	static final int MENU_view_monthChart = 4;
 	static final int MENU_set_option = 5;
 	static final int MENU_View_ALL = 6;
+	static final int MENU_Sync_Consumption = 7;
+	static final int MENU_AboutAuthor = 8;
 
 	private CatListView mPullRefreshListView;
 	private ConsumptionlogsController mConsumptionlogsController;
@@ -44,11 +46,16 @@ public class ConsumptionlogsActivity extends SherlockListActivity {
 		menu.add(0, MENU_View_ALL, 0, "查看全部");
 		menu.add(0, MENU_search_titleKey, 0, "按名称过滤");
 		menu.add(0, MENU_search_startDate, 0, "按时间过滤");
-		menu.add(0, MENU_search_money, 0, "按金额过滤");
-		menu.add(0, MENU_set_option, 0, "软件配置");
+		menu.add(0, MENU_view_monthChart, 0, "月统计");
+		menu.add(0, MENU_set_option, 0, "设置");
+		menu.add(0, MENU_AboutAuthor, 0, "关于本软件");
 		
 		menu.add(0, MENU_Add_Consumption, 0, "New")
         .setIcon(R.drawable.ic_compose)
+        .setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+		
+		menu.add(0, MENU_Sync_Consumption, 0, "Sync")
+        .setIcon(R.drawable.ic_refresh)
         .setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
 		
 		//加入统计菜单
