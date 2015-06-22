@@ -23,13 +23,11 @@
         </activity>
         <activity
             android:name=".ConsumptionActivity"
-            android:parentActivityName=".ConsumptionlogsActivity"
             android:uiOptions="splitActionBarWhenNarrow"
             android:windowSoftInputMode="adjustUnspecified|stateHidden" >
         </activity>
         <activity
-            android:name=".MonthChartActivity"
-            android:parentActivityName=".ConsumptionlogsActivity" >
+            android:name=".MonthChartActivity" >
         </activity>
     </application>
 

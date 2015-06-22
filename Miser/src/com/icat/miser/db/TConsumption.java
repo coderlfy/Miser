@@ -5,7 +5,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.icat.miser.model.ConsumptionModel;
+import com.icat.miser.model.*;
 
 import android.annotation.SuppressLint;
 import android.content.ContentValues;
@@ -66,6 +66,32 @@ public class TConsumption {
 		return strid;
 	}
 
+	// Updating single contact
+	public int Update(ConsumptionModel consumption) {
+		SQLiteDatabase db = this.mSqlite.getWritableDatabase();
+
+		ContentValues values = new ContentValues();
+		values.put(TConsumptionColumns.title, consumption.getTitle());
+		values.put(TConsumptionColumns.isConsumption,
+				consumption.getIsConsumption());
+		values.put(TConsumptionColumns.money, consumption.getMoney());
+		values.put(TConsumptionColumns.startDate,
+				consumption.getStartDateString());
+
+		int keyid = consumption.getId();
+		Log.d("updateid", String.valueOf(keyid));
+		return db.update(TableName, values, TConsumptionColumns.ID + " = ?",
+				new String[] { String.valueOf(keyid) });// 主键要修改？？？
+	}
+
+	// Deleting single contact
+	public void Delete(int id) {
+		SQLiteDatabase db = this.mSqlite.getWritableDatabase();
+		db.delete(TableName, TConsumptionColumns.ID + " = ?",
+				new String[] { String.valueOf(id) });
+		db.close();
+	}
+
 	// Getting single contact
 	ConsumptionModel Get(int id) {
 		SQLiteDatabase db = this.mSqlite.getReadableDatabase();
@@ -86,8 +112,8 @@ public class TConsumption {
 					.setMoney(cursor.getDouble(2))
 					.setIsConsumption(cursor.getInt(1) == 1)
 					.setStartDate(
-							(new SimpleDateFormat("yyyy-MM-dd HH:mm")).parse(cursor
-									.getString(3)));
+							(new SimpleDateFormat("yyyy-MM-dd HH:mm"))
+									.parse(cursor.getString(3)));
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -142,7 +168,8 @@ public class TConsumption {
 								.setMoney(cursor.getDouble(3))
 								.setIsConsumption(cursor.getInt(2) == 1)
 								.setStartDate(
-										(new SimpleDateFormat("yyyy-MM-dd HH:mm"))
+										(new SimpleDateFormat(
+												"yyyy-MM-dd HH:mm"))
 												.parse(cursor.getString(4)));
 
 						mConsumptions.add(consumption);
@@ -167,32 +194,6 @@ public class TConsumption {
 		return mConsumptions;
 	}
 
-	// Updating single contact
-	public int Update(ConsumptionModel consumption) {
-		SQLiteDatabase db = this.mSqlite.getWritableDatabase();
-
-		ContentValues values = new ContentValues();
-		values.put(TConsumptionColumns.title, consumption.getTitle());
-		values.put(TConsumptionColumns.isConsumption,
-				consumption.getIsConsumption());
-		values.put(TConsumptionColumns.money, consumption.getMoney());
-		values.put(TConsumptionColumns.startDate,
-				consumption.getStartDateString());
-
-		int keyid = consumption.getId();
-		Log.d("updateid", String.valueOf(keyid));
-		return db.update(TableName, values, TConsumptionColumns.ID + " = ?",
-				new String[] { String.valueOf(keyid) });// 主键要修改？？？
-	}
-
-	// Deleting single contact
-	public void Delete(int id) {
-		SQLiteDatabase db = this.mSqlite.getWritableDatabase();
-		db.delete(TableName, TConsumptionColumns.ID + " = ?",
-				new String[] { String.valueOf(id) });
-		db.close();
-	}
-
 	// Getting contacts Count
 	public int GetCount() {
 		String countQuery = "SELECT  * FROM " + TableName;
@@ -204,4 +205,47 @@ public class TConsumption {
 		return c;
 	}
 
+	public ArrayList<ConsumptionMonthTotalModel> GetMonthTotal(int year) {
+		ArrayList<ConsumptionMonthTotalModel> monthtotals = null;
+		try {
+
+			monthtotals = new ArrayList<ConsumptionMonthTotalModel>();
+
+			String selectQuery = "select sum(" + TConsumptionColumns.money
+					+ ") as totalmoney, strftime('%m',"
+					+ TConsumptionColumns.startDate + ") as month,"
+					+ TConsumptionColumns.isConsumption + " from " + TableName
+					+ " group by strftime('%m',"
+					+ TConsumptionColumns.startDate + "),"
+					+ TConsumptionColumns.isConsumption
+					+ " order by strftime('%m'," + TConsumptionColumns.startDate
+					+ "), " + TConsumptionColumns.isConsumption;
+
+			SQLiteDatabase db = this.mSqlite.getWritableDatabase();
+			Cursor cursor = db.rawQuery(selectQuery, null);
+
+			// looping through all rows and adding to list
+			if (cursor.moveToFirst()) {
+				do {
+					ConsumptionMonthTotalModel monthtotal = new ConsumptionMonthTotalModel();
+
+					monthtotal.setMoney(cursor.getDouble(0))
+							.setMonthViewString(cursor.getString(1))
+							.setIsConsumption(cursor.getInt(2) == 1);
+
+					monthtotals.add(monthtotal);
+				} while (cursor.moveToNext());
+			}
+
+			// return contact list
+			cursor.close();
+			db.close();
+			return monthtotals;
+		} catch (Exception e) {
+			// TODO: handle exception
+			Log.e("all_contact", "" + e);
+		}
+
+		return monthtotals;
+	}
 }

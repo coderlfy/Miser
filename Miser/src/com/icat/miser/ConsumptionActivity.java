@@ -28,12 +28,12 @@ public class ConsumptionActivity extends SherlockActivity {
 	private EditText mEtMoney = null;
 	private ToggleButton mTBisConsumptioned = null;
 	private int mCurrentId = 0;
-	
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_consumption);
-
+		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 		mEtTitle = (EditText) findViewById(R.id.et_title);
 		mEtStartDate = (EditText) findViewById(R.id.et_startDate);
 		mEtMoney = (EditText) findViewById(R.id.et_money);
@@ -41,37 +41,30 @@ public class ConsumptionActivity extends SherlockActivity {
 		mEtStartDate.setInputType(InputType.TYPE_NULL);
 
 		/*
-		final Calendar c = Calendar.getInstance();
-		// 首次编辑时不可获取编辑值
-		mEtStartDate.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				DatePickerDialog dialog = new DatePickerDialog(
-						ConsumptionActivity.this,
-						new DatePickerDialog.OnDateSetListener() {
-							@Override
-							public void onDateSet(DatePicker view, int year,
-									int monthOfYear, int dayOfMonth) {
-								c.set(year, monthOfYear, dayOfMonth);
-								mEtStartDate.setText(DateFormat.format(
-										"yyy-MM-dd", c));
-							}
-						}, c.get(Calendar.YEAR), c.get(Calendar.MONTH), c
-								.get(Calendar.DAY_OF_MONTH));
-				dialog.show();
-			}
-		});
-*/
+		 * final Calendar c = Calendar.getInstance(); // 首次编辑时不可获取编辑值
+		 * mEtStartDate.setOnClickListener(new View.OnClickListener() {
+		 * 
+		 * @Override public void onClick(View v) { DatePickerDialog dialog = new
+		 * DatePickerDialog( ConsumptionActivity.this, new
+		 * DatePickerDialog.OnDateSetListener() {
+		 * 
+		 * @Override public void onDateSet(DatePicker view, int year, int
+		 * monthOfYear, int dayOfMonth) { c.set(year, monthOfYear, dayOfMonth);
+		 * mEtStartDate.setText(DateFormat.format( "yyy-MM-dd", c)); } },
+		 * c.get(Calendar.YEAR), c.get(Calendar.MONTH), c
+		 * .get(Calendar.DAY_OF_MONTH)); dialog.show(); } });
+		 */
 		mEtStartDate.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 
 				DateTimePickDialogUtil dateTimePicKDialog = new DateTimePickDialogUtil(
-						ConsumptionActivity.this, mEtStartDate.getText().toString());
+						ConsumptionActivity.this, mEtStartDate.getText()
+								.toString());
 				dateTimePicKDialog.dateTimePicKDialog(mEtStartDate);
 
 			}
 		});
-		
+
 		String initDateTime = "";
 		Intent intent = this.getIntent();
 		Serializable requestobj = intent.getSerializableExtra("consumptionlog");
@@ -84,14 +77,13 @@ public class ConsumptionActivity extends SherlockActivity {
 			mEtMoney.setText(String.valueOf(mConsumptionLog.getMoney()));
 			mTBisConsumptioned.setChecked(!mConsumptionLog.getIsConsumption());
 			mCurrentId = mConsumptionLog.getId();
-		}
-		else{
-			initDateTime = (String) DateFormat.format("yyyy-MM-dd HH:mm", new Date());
+		} else {
+			initDateTime = (String) DateFormat.format("yyyy-MM-dd HH:mm",
+					new Date());
 			mEtStartDate.setText(initDateTime);
 			mTBisConsumptioned.setChecked(false);
 		}
-		
-		
+
 	}
 
 	@Override
@@ -121,19 +113,27 @@ public class ConsumptionActivity extends SherlockActivity {
 		case 1:
 			ConsumptionModel consumption = new ConsumptionModel();
 			try {
-				consumption.setTitle(this.mEtTitle.getText().toString())
-							.setMoney(Double.parseDouble(this.mEtMoney.getText().toString()))
-							.setIsConsumption(!this.mTBisConsumptioned.isChecked())
-							.setStartDate((new SimpleDateFormat("yyyy-MM-dd HH:mm")).parse(this.mEtStartDate.getText().toString()));
-				
-				if(this.mCurrentId == 0)
-					consumption.setId(ConsumptionlogsController._ConsumptionDataManager.add(consumption));
-				else{
+				consumption
+						.setTitle(this.mEtTitle.getText().toString())
+						.setMoney(
+								Double.parseDouble(this.mEtMoney.getText()
+										.toString()))
+						.setIsConsumption(!this.mTBisConsumptioned.isChecked())
+						.setStartDate(
+								(new SimpleDateFormat("yyyy-MM-dd HH:mm"))
+										.parse(this.mEtStartDate.getText()
+												.toString()));
+
+				if (this.mCurrentId == 0)
+					consumption
+							.setId(ConsumptionlogsController._ConsumptionDataManager
+									.add(consumption));
+				else {
 					consumption.setId(this.mCurrentId);
-					ConsumptionlogsController._ConsumptionDataManager.update(consumption);
+					ConsumptionlogsController._ConsumptionDataManager
+							.update(consumption);
 				}
-					
-				
+
 				ConsumptionlogsController.updateListView(consumption);
 
 			} catch (NumberFormatException e) {
@@ -148,6 +148,11 @@ public class ConsumptionActivity extends SherlockActivity {
 		case 2:
 			this.finish();
 			break;
+		case android.R.id.home:
+
+			this.finish();
+			break;
+
 		}
 		// TODO Auto-generated method stub
 		return super.onOptionsItemSelected(item);

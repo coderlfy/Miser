@@ -10,20 +10,29 @@ import org.xclcharts.chart.BarData;
 import org.xclcharts.common.DensityUtil;
 import org.xclcharts.common.IFormatterDoubleCallBack;
 import org.xclcharts.common.IFormatterTextCallBack;
+import org.xclcharts.event.click.BarPosition;
 import org.xclcharts.renderer.*;
 import org.xclcharts.view.ChartView;
 
+import android.graphics.Canvas;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.MotionEvent;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.FrameLayout.LayoutParams;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import com.actionbarsherlock.app.SherlockActivity;
+import com.actionbarsherlock.view.MenuItem;
+import com.icat.miser.cache.ConsumptionDataManager;
+import com.icat.miser.db.TConsumption;
+import com.icat.miser.model.ConsumptionModel;
+import com.icat.miser.model.ConsumptionMonthTotalModel;
 
 public class MonthChartActivity extends SherlockActivity {
 
@@ -32,14 +41,18 @@ public class MonthChartActivity extends SherlockActivity {
 	// 轴数据源
 	private List<String> chartLabels = new LinkedList<String>();
 	private List<BarData> chartData = new LinkedList<BarData>();
+	private List<ConsumptionMonthTotalModel> _ConsuptionsTotals = null;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
+		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-		initView();
-		
+		this.getMonthView();
+		this.createMonthtotal();
+		this.initView();
+
 		FrameLayout content = new FrameLayout(this);
 
 		// 缩放控件放置在FrameLayout的上层，用于放大缩小图表
@@ -66,7 +79,7 @@ public class MonthChartActivity extends SherlockActivity {
 		// 图表view放入布局中，也可直接将图表view放入Activity对应的xml文件中
 		final RelativeLayout chartLayout = new RelativeLayout(this);
 
-		chartLayout.addView(getMonthView(), layoutParams);
+		chartLayout.addView(view, layoutParams);
 
 		// 增加控件
 		((ViewGroup) content).addView(chartLayout);
@@ -74,19 +87,33 @@ public class MonthChartActivity extends SherlockActivity {
 		setContentView(content);
 	}
 
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		int id = item.getItemId();
+		// 当点击不同的menu item 是执行不同的操作
+		Log.d("home", String.valueOf(id));
+		switch (item.getItemId()) {
+
+		case android.R.id.home:
+
+			this.finish();
+			break;
+		}
+		return super.onOptionsItemSelected(item);
+	}
+
 	private void initView() {
 		chartLabels();
 		chartDataSet();
 		chartRender();
 	}
-	
-	protected int[] getBarLnDefaultSpadding()
-	{
-		int [] ltrb = new int[4];
-		ltrb[0] = DensityUtil.dip2px(view.getContext(), 40); //left	
-		ltrb[1] = DensityUtil.dip2px(view.getContext(), 60); //top	
-		ltrb[2] = DensityUtil.dip2px(view.getContext(), 20); //right	
-		ltrb[3] = DensityUtil.dip2px(view.getContext(), 40); //bottom						
+
+	protected int[] getBarLnDefaultSpadding() {
+		int[] ltrb = new int[4];
+		ltrb[0] = DensityUtil.dip2px(view.getContext(), 40); // left
+		ltrb[1] = DensityUtil.dip2px(view.getContext(), 60); // top
+		ltrb[2] = DensityUtil.dip2px(view.getContext(), 20); // right
+		ltrb[3] = DensityUtil.dip2px(view.getContext(), 40); // bottom
 		return ltrb;
 	}
 
@@ -94,8 +121,8 @@ public class MonthChartActivity extends SherlockActivity {
 		try {
 			// 设置绘图区默认缩进px值,留置空间显示Axis,Axistitle....
 			int[] ltrb = getBarLnDefaultSpadding();
-			chart.setPadding(DensityUtil.dip2px(view.getContext(), 40), ltrb[1],
-					ltrb[2], ltrb[3]);
+			chart.setPadding(DensityUtil.dip2px(view.getContext(), 40),
+					ltrb[1], ltrb[2], ltrb[3]);
 
 			// 指定显示为横向3D柱形
 			chart.setChartDirection(XEnum.Direction.HORIZONTAL);
@@ -105,18 +132,18 @@ public class MonthChartActivity extends SherlockActivity {
 			chart.setCategories(chartLabels);
 
 			// 坐标系
-			chart.getDataAxis().setAxisMax(50);
-			chart.getDataAxis().setAxisMin(10);
-			chart.getDataAxis().setAxisSteps(10);
+			chart.getDataAxis().setAxisMax(20000);
+			chart.getDataAxis().setAxisMin(1000);
+			chart.getDataAxis().setAxisSteps(5000);
 			chart.getCategoryAxis().setTickLabelRotateAngle(-45f);
 
 			// 标题
-			chart.setTitle("本月原料进货情况");
-			chart.addSubtitle("(XCL-Charts Demo)");
+			chart.setTitle("2015年度按月统计费用柱状图");
+			// chart.addSubtitle("(XCL-Charts Demo)");
 
 			// 轴标题
-			chart.getAxisTitle().setLeftTitle("原料");
-			chart.getAxisTitle().setLowerTitle("进货量");
+			chart.getAxisTitle().setLeftTitle("月份");
+			chart.getAxisTitle().setLowerTitle("费用");
 
 			// 背景网格
 			chart.getPlotGrid().showHorizontalLines();
@@ -132,7 +159,7 @@ public class MonthChartActivity extends SherlockActivity {
 					Double tmp = Double.parseDouble(value);
 					DecimalFormat df = new DecimalFormat("#0");
 					String label = df.format(tmp).toString();
-					return (label + "吨");
+					return (label + "元");
 				}
 
 			});
@@ -168,34 +195,123 @@ public class MonthChartActivity extends SherlockActivity {
 	private void chartDataSet() {
 		// 标签对应的柱形数据集
 		List<Double> dataSeriesA = new LinkedList<Double>();
-		dataSeriesA.add(20d);
-		dataSeriesA.add(28d);
-		dataSeriesA.add(45d);
+		// dataSeriesA.add(20d);
+		// dataSeriesA.add(28d);
+		// dataSeriesA.add(45d);
 
 		List<Double> dataSeriesB = new LinkedList<Double>();
-		dataSeriesB.add(30d);
-		dataSeriesB.add(17d);
-		dataSeriesB.add(35d);
+		// dataSeriesB.add(30d);
+		// dataSeriesB.add(17d);
+		// dataSeriesB.add(35d);
+		ConsumptionMonthTotalModel monthtotal = null;
+		int recordindex = 0;
+		for (int i = 1; i < 13; i++) {
+			if (this._ConsuptionsTotals.size() > recordindex) {
+				monthtotal = this._ConsuptionsTotals.get(recordindex);
+				String tmpi = (i < 10) ? "0" + String.valueOf(i) : String
+						.valueOf(i);
+				Boolean hasB = false;
+				if (monthtotal.getMonthViewString().compareTo(tmpi) == 0) {
+					if (!monthtotal.getIsConsumption()) {
+						dataSeriesB.add(monthtotal.getMoney());
+						recordindex++;
+						if (this._ConsuptionsTotals.size() > recordindex)
+							monthtotal = this._ConsuptionsTotals
+									.get(recordindex);
+						else
+							monthtotal = null;
+						
+						hasB = true;
+					}
+					if (monthtotal != null
+							&& monthtotal.getMonthViewString().compareTo(tmpi) == 0
+							&& monthtotal.getIsConsumption()) {
+						dataSeriesA.add(monthtotal.getMoney());
+						recordindex++;
+						
+						if(!hasB)
+							dataSeriesB.add(0d);
+					} else
+						dataSeriesA.add(0d);
+				} else {
+					dataSeriesA.add(0d);
+					dataSeriesB.add(0d);
+				}
+			} else {
+				dataSeriesA.add(0d);
+				dataSeriesB.add(0d);
+			}
+		}
 
-		chartData.add(new BarData("湖南", dataSeriesA, Color.rgb(224, 62, 54)));
-		chartData.add(new BarData("福建", dataSeriesB, Color.rgb(140, 71, 222)));
+		chartData
+				.add(new BarData("支出", dataSeriesA, android.graphics.Color.RED));
+		chartData.add(new BarData("收入", dataSeriesB,
+				android.graphics.Color.GREEN));
 	}
 
 	private void chartLabels() {
-		chartLabels.add("芝麻");
-		chartLabels.add("茶叶");
-		chartLabels.add("花生");
+		for (int i = 1; i < 13; i++) {
+			chartLabels.add(i + "月");
+		}
+	}
 
+	private void createMonthtotal() {
+		TConsumption tConsumption = new TConsumption();
+		tConsumption.setDBHelper(ConsumptionDataManager._MiserDBHelper);
+		this._ConsuptionsTotals = tConsumption.GetMonthTotal(2015);
 	}
 
 	private ChartView getMonthView() {
 		view = new ChartView(this) {
 
 			@Override
+			protected void onSizeChanged(int w, int h, int oldw, int oldh) {
+				super.onSizeChanged(w, h, oldw, oldh);
+				// 图所占范围大小
+				chart.setChartRange(w, h);
+			}
+
+			@Override
 			public List<XChart> bindChart() {
 				List<XChart> lst = new ArrayList<XChart>();
 				lst.add(chart);
 				return lst;
+			}
+
+			@Override
+			public void render(Canvas canvas) {
+				try {
+					chart.render(canvas);
+				} catch (Exception e) {
+					Log.e("chartdebug", e.toString());
+				}
+			}
+
+			@Override
+			public boolean onTouchEvent(MotionEvent event) { //
+				// TODO Auto-generated method stub super.onTouchEvent(event);
+				return false;
+				// if (event.getAction() == MotionEvent.ACTION_UP) {
+				// triggerClick(event.getX(), event.getY());
+				// }
+				// return true;
+			}
+
+			// 触发监听
+			private void triggerClick(float x, float y) {
+				BarPosition record = chart.getPositionRecord(x, y);
+				if (null == record)
+					return;
+
+				BarData bData = chartData.get(record.getDataID());
+				Double bValue = bData.getDataSet().get(record.getDataChildID());
+
+				Toast.makeText(
+						this.getContext(),
+						"info:" + record.getRectInfo() + " Key:"
+								+ bData.getKey() + " Current Value:"
+								+ Double.toString(bValue), Toast.LENGTH_SHORT)
+						.show();
 			}
 		};
 

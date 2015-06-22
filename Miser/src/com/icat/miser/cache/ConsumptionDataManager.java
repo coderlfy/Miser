@@ -14,7 +14,7 @@ public class ConsumptionDataManager {
 	private int mHasViewRecords = 0;
 	private int mTotalRecords = 0;
 	private int mCurrentPageIndex = 0;
-	private int mPageSize = 2;
+	private int mPageSize = 5;
 	private List<ConsumptionModel> _Consuptions = null;
 	private List<Integer> _newIds = null;
 
