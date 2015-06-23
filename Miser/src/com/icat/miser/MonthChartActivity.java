@@ -14,6 +14,7 @@ import org.xclcharts.event.click.BarPosition;
 import org.xclcharts.renderer.*;
 import org.xclcharts.view.ChartView;
 
+import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -110,10 +111,11 @@ public class MonthChartActivity extends SherlockActivity {
 
 	protected int[] getBarLnDefaultSpadding() {
 		int[] ltrb = new int[4];
-		ltrb[0] = DensityUtil.dip2px(view.getContext(), 40); // left
-		ltrb[1] = DensityUtil.dip2px(view.getContext(), 60); // top
-		ltrb[2] = DensityUtil.dip2px(view.getContext(), 20); // right
-		ltrb[3] = DensityUtil.dip2px(view.getContext(), 40); // bottom
+		Context cxt = view.getContext();
+		ltrb[0] = DensityUtil.dip2px(cxt, 40); // left
+		ltrb[1] = DensityUtil.dip2px(cxt, 60); // top
+		ltrb[2] = DensityUtil.dip2px(cxt, 20); // right
+		ltrb[3] = DensityUtil.dip2px(cxt, 40); // bottom
 		return ltrb;
 	}
 
@@ -220,7 +222,7 @@ public class MonthChartActivity extends SherlockActivity {
 									.get(recordindex);
 						else
 							monthtotal = null;
-						
+
 						hasB = true;
 					}
 					if (monthtotal != null
@@ -228,8 +230,8 @@ public class MonthChartActivity extends SherlockActivity {
 							&& monthtotal.getIsConsumption()) {
 						dataSeriesA.add(monthtotal.getMoney());
 						recordindex++;
-						
-						if(!hasB)
+
+						if (!hasB)
 							dataSeriesB.add(0d);
 					} else
 						dataSeriesA.add(0d);
@@ -298,21 +300,18 @@ public class MonthChartActivity extends SherlockActivity {
 			}
 
 			// 触发监听
-			private void triggerClick(float x, float y) {
-				BarPosition record = chart.getPositionRecord(x, y);
-				if (null == record)
-					return;
-
-				BarData bData = chartData.get(record.getDataID());
-				Double bValue = bData.getDataSet().get(record.getDataChildID());
-
-				Toast.makeText(
-						this.getContext(),
-						"info:" + record.getRectInfo() + " Key:"
-								+ bData.getKey() + " Current Value:"
-								+ Double.toString(bValue), Toast.LENGTH_SHORT)
-						.show();
-			}
+			/*
+			 * 在图表上做链接 private void triggerClick(float x, float y) { BarPosition
+			 * record = chart.getPositionRecord(x, y); if (null == record)
+			 * return;
+			 * 
+			 * BarData bData = chartData.get(record.getDataID()); Double bValue
+			 * = bData.getDataSet().get(record.getDataChildID());
+			 * 
+			 * Toast.makeText( this.getContext(), "info:" + record.getRectInfo()
+			 * + " Key:" + bData.getKey() + " Current Value:" +
+			 * Double.toString(bValue), Toast.LENGTH_SHORT) .show(); }
+			 */
 		};
 
 		return view;
